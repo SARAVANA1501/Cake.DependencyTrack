@@ -1,0 +1,95 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "*"
+    paths-ignore:
+      - "README.md"
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Fetch all tags and branches
+        run: git fetch --prune --unshallow
+
+      - uses: actions/setup-dotnet@v3.2.0
+        with:
+          # codecov and unittests need 2.1
+          dotnet-version: '2.1.818'
+      - uses: actions/setup-dotnet@v3.2.0
+        with:
+          dotnet-version: '3.1.414'
+      - uses: actions/setup-dotnet@v3.2.0
+        with:
+          # need at least .NET 6 to build
+          dotnet-version: '6.0.400'
+          include-prerelease: true
+      - uses: actions/setup-dotnet@v3.2.0
+        with:
+          # need at least .NET 7 to build
+          dotnet-version: '7.0.401'
+          include-prerelease: true
+
+      - name: Cache Tools
+        uses: actions/cache@v3
+        with:
+          path: tools
+          key: ${{ runner.os }}-tools-${{ hashFiles('build.cake') }}
+
+      - name: Build project
+        uses: cake-build/cake-action@v1.4.1
+        with:
+          script-path: build.cake
+          target: Test
+          verbosity: Diagnostic
+          cake-version: 3.1.0
+
+      - name: Create Test Coverage Badge
+        uses: simon-k/dotnet-code-coverage-badge@v1.0.0
+        id: create_coverage_badge
+        if: runner.os == 'Linux'
+        with:
+          label: Test Coverage
+          color: orange
+          path: test/Cake.DependencyTrack.Test/TestResults/coverage.opencover.xml
+          gist-filename: cakedependancytrackcoverage.json
+          gist-id: cb35602c6a5e75e8a32ca62e0d79631b
+          gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}
+
+      - name: Print code coverage
+        if: runner.os == 'Linux'
+        run: echo "Code coverage percentage ${{steps.create_coverage_badge.outputs.percentage}}%"
+
+      - name: Print badge data
+        if: runner.os == 'Linux'
+        run: echo "Badge data ${{steps.test_step.outputs.badge}}"      
+      
+      # currently, Cake.Recipe does not upload artifacts when run on gh-actions
+      - name: Upload Issues
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: warn
+          name: ${{ matrix.os }} Issues
+          path: |
+            BuildArtifacts/report.html
+            BuildArtifacts/**/coverlet/*.xml
+
+      - name: Upload Packages
+        uses: actions/upload-artifact@v3
+        if: runner.os == 'Windows'
+        with:
+          if-no-files-found: warn
+          name: package
+          path: BuildArtifacts/Packages/**/*

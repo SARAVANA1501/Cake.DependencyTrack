@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;net7.0;net6.0;net461</TargetFrameworks>
+        <Version>0.0.1-dev</Version>
+        <Authors>Saravanakumar</Authors>
+        <Title>Cake.DependencyTrack</Title>
+        <Description>Cake.DependencyTrack add-in helps to integrate the dependency track platform to your CI/CD pipelines and provides functionalities like Build time bom upload, fail the pipeline when thresholds are not satisfied.</Description>
+        <PackageIcon>cake-contrib-medium.png</PackageIcon>
+        <RepositoryUrl>https://github.com/SARAVANA1501/Cake.DependencyTrack</RepositoryUrl>
+        <PackageTags>cake-addin</PackageTags>
+        <SignAssembly>true</SignAssembly>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;net7.0;net6.0;net461</TargetFrameworks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Cake.Core" Version="1.0.0" PrivateAssets="all"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="cake-contrib-medium.png" />
+        <Content Include="cake-contrib-medium.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </Content>
+    </ItemGroup>
+
+</Project>
