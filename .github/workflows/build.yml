@@ -63,7 +63,7 @@ jobs:
         with:
           label: Test Coverage
           color: orange
-          path: test/Cake.DependencyTrack.Test/TestResults/coverage.opencover.xml
+          path: tests/Cake.DependencyTrack.Tests/TestResults/coverage.opencover.xml
           gist-filename: cakedependancytrackcoverage.json
           gist-id: cb35602c6a5e75e8a32ca62e0d79631b
           gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}
