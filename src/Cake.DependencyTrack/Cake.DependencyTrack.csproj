@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFrameworks>netcoreapp3.1;net7.0;net6.0;</TargetFrameworks>
+        <TargetFrameworks>net7.0;net6.0;</TargetFrameworks>
         <Version>0.0.1-dev</Version>
         <Authors>Saravanakumar</Authors>
         <Title>Cake.DependencyTrack</Title>
@@ -18,7 +18,7 @@
         <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net7.0;net6.0</TargetFrameworks>
+        <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
