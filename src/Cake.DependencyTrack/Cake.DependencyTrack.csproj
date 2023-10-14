@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net7.0;net6.0;net461</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net7.0;net6.0;</TargetFrameworks>
         <Version>0.0.1-dev</Version>
         <Authors>Saravanakumar</Authors>
         <Title>Cake.DependencyTrack</Title>
         <Description>Cake.DependencyTrack add-in helps to integrate the dependency track platform to your CI/CD pipelines and provides functionalities like Build time bom upload, fail the pipeline when thresholds are not satisfied.</Description>
         <PackageIcon>cake-contrib-medium.png</PackageIcon>
         <RepositoryUrl>https://github.com/SARAVANA1501/Cake.DependencyTrack</RepositoryUrl>
-        <PackageTags>cake-addin</PackageTags>
+        <PackageTags>cake-addin,cake,dependency track</PackageTags>
         <SignAssembly>true</SignAssembly>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -23,6 +23,7 @@
 
     <ItemGroup>
         <PackageReference Include="Cake.Core" Version="1.0.0" PrivateAssets="all"/>
+        <PackageReference Include="System.Text.Json" Version="7.0.3" />
     </ItemGroup>
     <ItemGroup>
         <None Remove="cake-contrib-medium.png" />
@@ -31,6 +32,12 @@
             <Pack>True</Pack>
             <PackagePath></PackagePath>
         </Content>
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+      <PackageReference Include="Cake.Http" Version="3.0.2" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+      <PackageReference Include="Cake.Http" Version="3.0.2" />
     </ItemGroup>
 
 </Project>

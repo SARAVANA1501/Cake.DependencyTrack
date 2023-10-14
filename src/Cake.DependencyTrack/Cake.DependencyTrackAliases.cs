@@ -8,12 +8,14 @@ using System.Text;
 
 namespace Cake.DependencyTrack
 {
-    [CakeAliasCategory("Sample")]
+    [CakeAliasCategory("Cake.DependencyTrack")]
     public static class AddinAliases
     {
         [CakeMethodAlias]
-        public static void Hello(this ICakeContext ctx, string name)
+        [CakeAliasCategory("Dependency Track file upload")]
+        public static void UploadBOMFile(this ICakeContext ctx, string name)
         {
+            
             ctx.Log.Information("Hello " + name);
         }
     }
