@@ -18,7 +18,7 @@
         <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net7.0;net6.0;net461</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net7.0;net6.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -32,12 +32,6 @@
             <Pack>True</Pack>
             <PackagePath></PackagePath>
         </Content>
-    </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-      <PackageReference Include="Cake.Http" Version="3.0.2" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-      <PackageReference Include="Cake.Http" Version="3.0.2" />
     </ItemGroup>
 
 </Project>
