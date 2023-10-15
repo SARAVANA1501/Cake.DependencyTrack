@@ -1,16 +1,15 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 using System.Web;
 using Cake.DependencyTrack.Models;
 
-
-namespace Cake.DependencyTrack
+namespace Cake.DependencyTrack.Services
 {
-    internal class DependencyTrackClient
+    internal class DependencyTrackClient : IDependencyTrackClient
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
@@ -41,7 +40,7 @@ namespace Cake.DependencyTrack
             return ss["token"]?.ToString();
         }
 
-        private HttpRequestMessage HttpRequestMessage(HttpMethod method, object body, string path)
+        public HttpRequestMessage HttpRequestMessage(HttpMethod method, object body, string path)
         {
             HttpRequestMessage request = new HttpRequestMessage(method,
                 new Uri(_baseUri, path).AbsoluteUri);

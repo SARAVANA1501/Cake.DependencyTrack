@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     serialNumber="urn:uuid:f9808d9d-03b6-44d6-9993-5ae418f2e911" version="1"
+     xmlns="http://cyclonedx.org/schema/bom/1.3">
+    <metadata>
+        <tools>
+            <tool>
+                <vendor>CycloneDX</vendor>
+                <name>CycloneDX module for .NET</name>
+                <version>2.2.0.0</version>
+            </tool>
+        </tools>
+        <component type="application" bom-ref="Test@0.0.0">
+            <name>Test</name>
+            <version>0.0.0</version>
+        </component>
+    </metadata>
+    <components>
+        <component type="library" bom-ref="pkg:nuget/Amazon.Extensions.Configuration.SystemsManager@3.0.0">
+            <publisher>Amazon Web Services</publisher>
+            <name>Amazon.Extensions.Configuration.SystemsManager</name>
+            <version>3.0.0</version>
+            <description>.NET Configuration Extensions for AWS Systems Manager</description>
+            <scope>required</scope>
+            <hashes>
+                <hash alg="SHA-512">
+                    D5D427FD2447EE0DEA3367ECA8CC05D9962E21089C61532F8EAD8E565BFBB530FB156849D857648F2DB3447F9C423B03731F94B327A4EDCAE1E7C68B8D50E9D5
+                </hash>
+            </hashes>
+            <licenses>
+                <license>
+                    <url>https://aka.ms/deprecateLicenseUrl</url>
+                </license>
+            </licenses>
+            <copyright>2018-2021</copyright>
+            <purl>pkg:nuget/Amazon.Extensions.Configuration.SystemsManager@3.0.0</purl>
+            <externalReferences>
+                <reference type="website">
+                    <url>https://github.com/aws/aws-dotnet-extensions-configuration/</url>
+                </reference>
+                <reference type="vcs">
+                    <url>https://github.com/aws/aws-dotnet-extensions-configuration/</url>
+                </reference>
+            </externalReferences>
+        </component>
+    </components>
+    <dependencies>
+        <dependency ref="pkg:nuget/Amazon.Extensions.Configuration.SystemsManager@3.0.0">
+            <dependency ref="pkg:nuget/AWSSDK.AppConfig@3.7.0.52"/>
+            <dependency ref="pkg:nuget/AWSSDK.Extensions.NETCore.Setup@3.7.2"/>
+            <dependency ref="pkg:nuget/AWSSDK.SimpleSystemsManagement@3.7.4.11"/>
+            <dependency ref="pkg:nuget/Microsoft.Extensions.Configuration@2.2.0"/>
+            <dependency ref="pkg:nuget/Newtonsoft.Json@13.0.1"/>
+        </dependency>
+    </dependencies>
+</bom>
