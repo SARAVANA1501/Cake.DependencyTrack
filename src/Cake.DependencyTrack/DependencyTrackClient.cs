@@ -4,6 +4,8 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Web;
+using Cake.DependencyTrack.Models;
 
 
 namespace Cake.DependencyTrack
@@ -30,7 +32,7 @@ namespace Cake.DependencyTrack
                 project = projectId,
                 bom = base64Content
             };
-            var request = HttpRequestMessage(HttpMethod.Put, body,"api/v1/bom");
+            var request = HttpRequestMessage(HttpMethod.Put, body, "api/v1/bom");
 
             HttpResponseMessage response = await _httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
@@ -50,6 +52,41 @@ namespace Cake.DependencyTrack
             request.Content = new StringContent(JsonSerializer.Serialize(body));
             request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             return request;
+        }
+
+        public async Task<Project> GetProjectDetails(string projectName, string version)
+        {
+            var requestUri = new Uri(_baseUri, "api/v1/project/lookup")
+                .AddQuery("name", projectName)
+                .AddQuery("version", version).AbsoluteUri;
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get,
+                requestUri);
+            request.Headers.Add("accept", "application/json");
+            request.Headers.Add("X-Api-Key", _apiKey);
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+            return await JsonSerializer.DeserializeAsync<Project>(responseBody, options);
+        }
+    }
+
+    internal static class HttpExtensions
+    {
+        public static Uri AddQuery(this Uri uri, string name, string value)
+        {
+            var httpValueCollection = HttpUtility.ParseQueryString(uri.Query);
+
+            httpValueCollection.Remove(name);
+            httpValueCollection.Add(name, value);
+
+            var ub = new UriBuilder(uri);
+            ub.Query = httpValueCollection.ToString();
+
+            return ub.Uri;
         }
     }
 }

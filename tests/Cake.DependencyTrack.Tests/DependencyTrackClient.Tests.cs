@@ -1,4 +1,5 @@
 using System.Net;
+using Cake.DependencyTrack.Models;
 using Moq;
 using Moq.Protected;
 
@@ -40,9 +41,50 @@ public class DependencyTrackClientTests
                 && req.Headers.Contains("X-Api-Key") && req.Headers.GetValues("X-Api-Key").First() == "test-key"
                 && req.Headers.Contains("accept")
                 && req.Content.Headers.Contains("Content-Type")
-                && req.Content.ReadAsStringAsync().Result.Contains("project") 
+                && req.Content.ReadAsStringAsync().Result.Contains("project")
                 && req.Content.ReadAsStringAsync().Result.Contains("bom")),
             ItExpr.IsAny<CancellationToken>());
         Assert.Equal("5075a155-8779-4074-b46a-2447bb81ca7e", taskId);
+    }
+
+    [Fact]
+    public async Task TestGetProjectDetails()
+    {
+        var handlerMock = new Mock<HttpMessageHandler>();
+        var projectId = "5075a155-8779-4074-b46a-2447bb81ca7e";
+        string projectName = "test";
+        string version = "CI";
+        var response = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(
+                $@"{{ ""uuid"": ""{projectId}"",""name"": ""{projectName}"",""version"": ""{version}"" }}"),
+        };
+        handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(response);
+        var baseUrl = "https://dependencytrack.org";
+        var apikey = "test-key";
+        var dependencyTrackClient = new DependencyTrackClient(new HttpClient(handlerMock.Object), baseUrl, apikey);
+
+        Project projectDetails = await dependencyTrackClient.GetProjectDetails(projectName, version);
+
+        handlerMock.Protected().Verify(
+            "SendAsync",
+            Times.Exactly(1),
+            ItExpr.Is<HttpRequestMessage>(req =>
+                req.Method == HttpMethod.Get
+                && req.RequestUri.ToString() == "https://dependencytrack.org/api/v1/project/lookup?name=test&version=CI"
+                && req.Headers.Contains("X-Api-Key") && req.Headers.GetValues("X-Api-Key").First() == "test-key"
+                && req.Headers.Contains("accept")),
+            ItExpr.IsAny<CancellationToken>());
+
+        Assert.Equal(projectId, projectDetails.Uuid.ToString());
+        Assert.Equal(projectName, projectDetails.Name);
+        Assert.Equal(version, projectDetails.Version);
     }
 }
