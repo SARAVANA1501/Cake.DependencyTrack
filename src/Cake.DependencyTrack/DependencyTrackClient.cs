@@ -72,6 +72,21 @@ namespace Cake.DependencyTrack
             };
             return await JsonSerializer.DeserializeAsync<Project>(responseBody, options);
         }
+
+        public async Task<AppVersion> GetServerVersion()
+        {
+            var requestUri = new Uri(_baseUri, "api/version").AbsoluteUri;
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            request.Headers.Add("accept", "application/json");
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+            return await JsonSerializer.DeserializeAsync<AppVersion>(responseBody, options);
+        }
     }
 
     internal static class HttpExtensions

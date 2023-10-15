@@ -87,4 +87,44 @@ public class DependencyTrackClientTests
         Assert.Equal(projectName, projectDetails.Name);
         Assert.Equal(version, projectDetails.Version);
     }
+
+    [Fact]
+    public async Task TestGetServerVersion()
+    {
+        var handlerMock = new Mock<HttpMessageHandler>();
+        var appId = "5075a155-8779-4074-b46a-2447bb81ca7e";
+        string name = "Dependency-Track";
+        string expectedVersion = "4.8.2";
+        var response = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(
+                $@"{{ ""uuid"": ""{appId}"",""application"": ""{name}"",""version"": ""{expectedVersion}"" }}"),
+        };
+        handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(response);
+        var baseUrl = "https://dependencytrack.org";
+        var apikey = "test-key";
+        var dependencyTrackClient = new DependencyTrackClient(new HttpClient(handlerMock.Object), baseUrl, apikey);
+
+        AppVersion appVersion = await dependencyTrackClient.GetServerVersion();
+
+        handlerMock.Protected().Verify(
+            "SendAsync",
+            Times.Exactly(1),
+            ItExpr.Is<HttpRequestMessage>(req =>
+                req.Method == HttpMethod.Get
+                && req.RequestUri.ToString() == "https://dependencytrack.org/api/version"
+                && req.Headers.Contains("accept")),
+            ItExpr.IsAny<CancellationToken>());
+
+        Assert.Equal(appId, appVersion.Uuid.ToString());
+        Assert.Equal(name, appVersion.Application);
+        Assert.Equal(expectedVersion, appVersion.Version);
+    }
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace Cake.DependencyTrack.Models;
 
-public class Project
+internal class Project
 {
     public string Name { get; set; }
     public string Version { get; set; }
