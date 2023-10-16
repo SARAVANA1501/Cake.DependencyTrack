@@ -40,6 +40,26 @@ namespace Cake.DependencyTrack.Services
             return ss["token"]?.ToString();
         }
 
+        public async Task<string> UploadBomAsync(string projectName, string projectVersion, bool autoCreate, string bomFile)
+        {
+            var byteContent = System.Text.Encoding.UTF8.GetBytes(bomFile);
+            var base64Content = Convert.ToBase64String(byteContent);
+            var body = new
+            {
+                projectName,
+                projectVersion,
+                autoCreate,
+                bom = base64Content
+            };
+            var request = HttpRequestMessage(HttpMethod.Put, body, "api/v1/bom");
+
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStreamAsync();
+            var ss = await JsonSerializer.DeserializeAsync<JsonObject>(responseBody);
+            return ss["token"]?.ToString();
+        }
+
         public HttpRequestMessage HttpRequestMessage(HttpMethod method, object body, string path)
         {
             HttpRequestMessage request = new HttpRequestMessage(method,

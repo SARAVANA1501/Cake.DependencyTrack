@@ -25,7 +25,12 @@ internal class DependencyTrackContext
         await CheckServerAvailability();
         _cakeContext.Log.Information("Starting bom uploading");
         var fileContent = await File.ReadAllTextAsync(bomUploadSettings.AbsoluteBomFilePath);
-        var taskId = await _dependencyTrackClient.UploadBomAsync(bomUploadSettings.ProjectId, fileContent);
+        string taskId = "";
+        if (!string.IsNullOrEmpty(bomUploadSettings.ProjectId))
+            taskId = await _dependencyTrackClient.UploadBomAsync(bomUploadSettings.ProjectId, fileContent);
+        else
+            taskId = await _dependencyTrackClient.UploadBomAsync(bomUploadSettings.ProjectName,
+                bomUploadSettings.Version, bomUploadSettings.AutoCreate, fileContent);
         _cakeContext.Log.Information("Completed bom uploading");
         _cakeContext.Log.Information($"Bom uploading Task Id : {taskId}");
     }

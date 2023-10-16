@@ -128,4 +128,46 @@ public class DependencyTrackClientTests
         Assert.Equal(name, appVersion.Application);
         Assert.Equal(expectedVersion, appVersion.Version);
     }
+
+    [Fact]
+    public async Task TestUploadBomFileWhenAutoCreationEnabled()
+    {
+        var handlerMock = new Mock<HttpMessageHandler>();
+        var token = "5075a155-8779-4074-b46a-2447bb81ca7e";
+        var response = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent($@"{{ ""token"": ""{token}"" }}"),
+        };
+        handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(response);
+        var baseUrl = "https://dependencytrack.org";
+        var apikey = "test-key";
+        var dependencyTrackClient = new DependencyTrackClient(new HttpClient(handlerMock.Object), baseUrl, apikey);
+
+        string projectName = "test_proj";
+        string projectVersion = "test_ver";
+        string bomFile = "test_bom";
+        var taskId = await dependencyTrackClient.UploadBomAsync(projectName, projectVersion, true, bomFile);
+
+        handlerMock.Protected().Verify(
+            "SendAsync",
+            Times.Exactly(1),
+            ItExpr.Is<HttpRequestMessage>(req =>
+                req.Method == HttpMethod.Put
+                && req.RequestUri.ToString() == "https://dependencytrack.org/api/v1/bom"
+                && req.Headers.Contains("X-Api-Key") && req.Headers.GetValues("X-Api-Key").First() == "test-key"
+                && req.Headers.Contains("accept")
+                && req.Content.Headers.Contains("Content-Type")
+                && req.Content.ReadAsStringAsync().Result.Contains("projectName")
+                && req.Content.ReadAsStringAsync().Result.Contains("projectVersion")
+                && req.Content.ReadAsStringAsync().Result.Contains("bom")),
+            ItExpr.IsAny<CancellationToken>());
+        Assert.Equal("5075a155-8779-4074-b46a-2447bb81ca7e", taskId);
+    }
 }
