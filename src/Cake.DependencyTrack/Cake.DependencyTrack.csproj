@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFrameworks>net6.0;net7.0;</TargetFrameworks>
-        <Version>0.0.1-alpha1</Version>
+        <Version>0.0.1</Version>
         <Authors>Saravanakumar</Authors>
         <Title>Cake.DependencyTrack</Title>
         <Description>Cake.DependencyTrack add-in helps to integrate the dependency track platform to your CI/CD pipelines and provides functionalities like Build time bom upload, fail the pipeline when thresholds are not satisfied.</Description>
