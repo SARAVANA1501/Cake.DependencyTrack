@@ -8,4 +8,5 @@ internal class Project
     public string Version { get; set; }
     public Guid Uuid { get; set; }
     public bool Active { get; set; }
+    public long LastBomImport { get; set; }
 }

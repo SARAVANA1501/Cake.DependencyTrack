@@ -40,7 +40,8 @@ namespace Cake.DependencyTrack.Services
             return ss["token"]?.ToString();
         }
 
-        public async Task<string> UploadBomAsync(string projectName, string projectVersion, bool autoCreate, string bomFile)
+        public async Task<string> UploadBomAsync(string projectName, string projectVersion, bool autoCreate,
+            string bomFile)
         {
             var byteContent = System.Text.Encoding.UTF8.GetBytes(bomFile);
             var base64Content = Convert.ToBase64String(byteContent);
@@ -92,6 +93,23 @@ namespace Cake.DependencyTrack.Services
             return await JsonSerializer.DeserializeAsync<Project>(responseBody, options);
         }
 
+        public async Task<Project> GetProjectDetails(string projectId)
+        {
+            var requestUri = new Uri(_baseUri, $"api/v1/project/{projectId}");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get,
+                requestUri);
+            request.Headers.Add("accept", "application/json");
+            request.Headers.Add("X-Api-Key", _apiKey);
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+            return await JsonSerializer.DeserializeAsync<Project>(responseBody, options);
+        }
+
         public async Task<AppVersion> GetServerVersion()
         {
             var requestUri = new Uri(_baseUri, "api/version").AbsoluteUri;
@@ -105,6 +123,23 @@ namespace Cake.DependencyTrack.Services
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             };
             return await JsonSerializer.DeserializeAsync<AppVersion>(responseBody, options);
+        }
+
+        public async Task<Metrics> GetMetrics(string projectId)
+        {
+            var requestUri = new Uri(_baseUri, $"api/v1/metrics/project/{projectId}/current");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get,
+                requestUri);
+            request.Headers.Add("accept", "application/json");
+            request.Headers.Add("X-Api-Key", _apiKey);
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+            return await JsonSerializer.DeserializeAsync<Metrics>(responseBody, options);
         }
     }
 

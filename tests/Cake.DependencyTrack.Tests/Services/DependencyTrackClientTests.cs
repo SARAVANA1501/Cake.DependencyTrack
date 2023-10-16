@@ -59,7 +59,7 @@ public class DependencyTrackClientTests
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(
-                $@"{{ ""uuid"": ""{projectId}"",""name"": ""{projectName}"",""version"": ""{version}"" }}"),
+                $@"{{ ""uuid"": ""{projectId}"",""name"": ""{projectName}"",""version"": ""{version}"",""active"":true,""lastBomImport"":1697451069947 }}"),
         };
         handlerMock
             .Protected()
@@ -87,6 +87,8 @@ public class DependencyTrackClientTests
         Assert.Equal(projectId, projectDetails.Uuid.ToString());
         Assert.Equal(projectName, projectDetails.Name);
         Assert.Equal(version, projectDetails.Version);
+        Assert.True(projectDetails.Active);
+        Assert.Equal(1697451069947,projectDetails.LastBomImport);
     }
 
     [Fact]
@@ -169,5 +171,87 @@ public class DependencyTrackClientTests
                 && req.Content.ReadAsStringAsync().Result.Contains("bom")),
             ItExpr.IsAny<CancellationToken>());
         Assert.Equal("5075a155-8779-4074-b46a-2447bb81ca7e", taskId);
+    }
+    
+    [Fact]
+    public async Task TestGetProjectDetailsWithProjectId()
+    {
+        var handlerMock = new Mock<HttpMessageHandler>();
+        var projectId = "5075a155-8779-4074-b46a-2447bb81ca7e";
+        string projectName = "test";
+        string version = "CI";
+        var response = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(
+                $@"{{ ""uuid"": ""{projectId}"",""name"": ""{projectName}"",""version"": ""{version}"" }}"),
+        };
+        handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(response);
+        var baseUrl = "https://dependencytrack.org";
+        var apikey = "test-key";
+        var dependencyTrackClient = new DependencyTrackClient(new HttpClient(handlerMock.Object), baseUrl, apikey);
+
+        Project projectDetails = await dependencyTrackClient.GetProjectDetails(projectId);
+
+        handlerMock.Protected().Verify(
+            "SendAsync",
+            Times.Exactly(1),
+            ItExpr.Is<HttpRequestMessage>(req =>
+                req.Method == HttpMethod.Get
+                && req.RequestUri.ToString() == $"https://dependencytrack.org/api/v1/project/{projectId}"
+                && req.Headers.Contains("X-Api-Key") && req.Headers.GetValues("X-Api-Key").First() == "test-key"
+                && req.Headers.Contains("accept")),
+            ItExpr.IsAny<CancellationToken>());
+
+        Assert.Equal(projectId, projectDetails.Uuid.ToString());
+        Assert.Equal(projectName, projectDetails.Name);
+        Assert.Equal(version, projectDetails.Version);
+    }
+    
+    [Fact]
+    public async Task TestGetMetricsDetailsForProjectId()
+    {
+        var handlerMock = new Mock<HttpMessageHandler>();
+        var projectId = "5075a155-8779-4074-b46a-2447bb81ca7e";
+        var response = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(
+                $@"{{ ""critical"": 1,""high"": 2,""medium"": 3,""low"":4,""lastOccurrence"":1697451069947 }}"),
+        };
+        handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(response);
+        var baseUrl = "https://dependencytrack.org";
+        var apikey = "test-key";
+        var dependencyTrackClient = new DependencyTrackClient(new HttpClient(handlerMock.Object), baseUrl, apikey);
+
+        Metrics metricsDetails = await dependencyTrackClient.GetMetrics(projectId);
+
+        handlerMock.Protected().Verify(
+            "SendAsync",
+            Times.Exactly(1),
+            ItExpr.Is<HttpRequestMessage>(req =>
+                req.Method == HttpMethod.Get
+                && req.RequestUri.ToString() == $"https://dependencytrack.org/api/v1/metrics/project/{projectId}/current"
+                && req.Headers.Contains("X-Api-Key") && req.Headers.GetValues("X-Api-Key").First() == "test-key"
+                && req.Headers.Contains("accept")),
+            ItExpr.IsAny<CancellationToken>());
+
+        Assert.Equal(1, metricsDetails.Critical);
+        Assert.Equal(2, metricsDetails.High);
+        Assert.Equal(4, metricsDetails.Low);
+        Assert.Equal(3, metricsDetails.Medium);
+        Assert.Equal(1697451069947, metricsDetails.LastOccurrence);
     }
 }

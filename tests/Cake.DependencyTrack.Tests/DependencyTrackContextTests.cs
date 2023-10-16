@@ -18,6 +18,11 @@ public class DependencyTrackContextTests
                 Version = "4.8.2",
                 Uuid = new Guid()
             });
+        mockDtrackClient.Setup(t => t.GetProjectDetails(It.IsAny<string>()))
+            .ReturnsAsync(new Project()
+            {
+                Uuid = new Guid()
+            });
         var mockCakeContext = new Mock<ICakeContext>();
         var context = new DependencyTrackContext(mockDtrackClient.Object, mockCakeContext.Object);
         var projectId = "test-id";
@@ -61,6 +66,11 @@ public class DependencyTrackContextTests
             {
                 Application = "Dependency Track",
                 Version = "4.8.2",
+                Uuid = new Guid()
+            });
+        mockDtrackClient.Setup(t => t.GetProjectDetails(It.IsAny<string>(), It.IsAny<string>()))
+            .ReturnsAsync(new Project()
+            {
                 Uuid = new Guid()
             });
         var mockCakeContext = new Mock<ICakeContext>();

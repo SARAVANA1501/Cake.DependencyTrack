@@ -26,13 +26,33 @@ internal class DependencyTrackContext
         _cakeContext.Log.Information("Starting bom uploading");
         var fileContent = await File.ReadAllTextAsync(bomUploadSettings.AbsoluteBomFilePath);
         string taskId = "";
+        Project project;
         if (!string.IsNullOrEmpty(bomUploadSettings.ProjectId))
+        {
             taskId = await _dependencyTrackClient.UploadBomAsync(bomUploadSettings.ProjectId, fileContent);
+            project = await _dependencyTrackClient.GetProjectDetails(bomUploadSettings.ProjectId);
+        }
         else
+        {
             taskId = await _dependencyTrackClient.UploadBomAsync(bomUploadSettings.ProjectName,
                 bomUploadSettings.Version, bomUploadSettings.AutoCreate, fileContent);
+            project = await _dependencyTrackClient.GetProjectDetails(bomUploadSettings.ProjectName,
+                bomUploadSettings.Version);
+        }
+
         _cakeContext.Log.Information("Completed bom uploading");
+        _cakeContext.Log.Information($"Project Id : {project.Uuid}");
         _cakeContext.Log.Information($"Bom uploading Task Id : {taskId}");
+        if (bomUploadSettings.ShouldValidateMetrics)
+        {
+            _cakeContext.Log.Information("Metrics validation started.");
+            await EnsureProjectMetricsAreUnderThreshold(bomUploadSettings.MetricsThresholdSettings, project, taskId);
+        }
+    }
+
+    internal async Task EnsureProjectMetricsAreUnderThreshold(MetricsThresholdSettings metricsThresholdSettings, Project project, string taskId)
+    {
+        throw new NotImplementedException();
     }
 
     private async Task CheckServerAvailability()

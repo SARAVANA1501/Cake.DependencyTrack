@@ -8,4 +8,6 @@ public class UploadBomSettings
     public bool AutoCreate { get; set; }
     public string AbsoluteBomFilePath { get; set; }
     public ServerSettings ServerSettings { get; set; }
+    public bool ShouldValidateMetrics { get; set; }
+    public MetricsThresholdSettings MetricsThresholdSettings { get; set; }
 }
