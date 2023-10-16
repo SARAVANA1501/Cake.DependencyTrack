@@ -13,4 +13,5 @@ internal interface IDependencyTrackClient
     Task<Project> GetProjectDetails(string projectId);
     Task<AppVersion> GetServerVersion();
     Task<BomStatus> GetBomProcessingStatus(string taskId);
+    Task<Metrics> GetMetrics(string projectId);
 }

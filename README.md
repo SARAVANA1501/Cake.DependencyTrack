@@ -61,6 +61,30 @@ Task("Default")
     await context.UploadBomFile(settings);
 });
 ```
+Sample code with threshold validation, if the project metrics are greater then are equal to given threshold then the pipeline will fail
+```
+Task("Default")
+.Does(async (context) => {
+    var settings = new UploadBomSettings{
+       ProjectName="test",
+       Version="CI",
+       AutoCreate=true,
+       AbsoluteBomFilePath="<bom file location>",
+       ServerSettings=new ServerSettings{
+            BaseServerUrl="<dependency track server base url>",
+            ApiKey="<api key>"
+       }
+       ShouldValidateMetrics=true,
+       MetricsThresholdSettings=new MetricsThresholdSettings{
+            CriticalCount=2,
+            HighCount=2,
+            MediumCount=2,
+            LowCount=2
+       }
+    };
+    await context.UploadBomFile(settings);
+});
+```
 
 ### Parameters
 
