@@ -254,4 +254,41 @@ public class DependencyTrackClientTests
         Assert.Equal(3, metricsDetails.Medium);
         Assert.Equal(1697451069947, metricsDetails.LastOccurrence);
     }
+    
+    [Fact]
+    public async Task TestGetBomProcessingStatus()
+    {
+        var handlerMock = new Mock<HttpMessageHandler>();
+        var taskId = "5075a155-8779-4074-b46a-2447bb81ca7e";
+        var response = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(
+                $@"{{ ""processing"": true}}"),
+        };
+        handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(response);
+        var baseUrl = "https://dependencytrack.org";
+        var apikey = "test-key";
+        var dependencyTrackClient = new DependencyTrackClient(new HttpClient(handlerMock.Object), baseUrl, apikey);
+
+        BomStatus bomStatus = await dependencyTrackClient.GetBomProcessingStatus(taskId);
+
+        handlerMock.Protected().Verify(
+            "SendAsync",
+            Times.Exactly(1),
+            ItExpr.Is<HttpRequestMessage>(req =>
+                req.Method == HttpMethod.Get
+                && req.RequestUri.ToString() == $"https://dependencytrack.org/api/v1/bom/token/{taskId}"
+                && req.Headers.Contains("X-Api-Key") && req.Headers.GetValues("X-Api-Key").First() == "test-key"
+                && req.Headers.Contains("accept")),
+            ItExpr.IsAny<CancellationToken>());
+
+        Assert.True(bomStatus.Processing);
+    }
 }

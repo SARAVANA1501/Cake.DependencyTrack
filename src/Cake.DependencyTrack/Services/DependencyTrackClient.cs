@@ -141,6 +141,23 @@ namespace Cake.DependencyTrack.Services
             };
             return await JsonSerializer.DeserializeAsync<Metrics>(responseBody, options);
         }
+
+        public async Task<BomStatus> GetBomProcessingStatus(string taskId)
+        {
+            var requestUri = new Uri(_baseUri, $"api/v1/bom/token/{taskId}");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get,
+                requestUri);
+            request.Headers.Add("accept", "application/json");
+            request.Headers.Add("X-Api-Key", _apiKey);
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+            return await JsonSerializer.DeserializeAsync<BomStatus>(responseBody, options);
+        }
     }
 
     internal static class HttpExtensions
