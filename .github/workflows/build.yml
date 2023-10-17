@@ -60,12 +60,6 @@ jobs:
           gist-filename: cakedependancytrackcoverage.json
           gist-id: cb35602c6a5e75e8a32ca62e0d79631b
           gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}
-          
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Print code coverage
         if: runner.os == 'Linux'
