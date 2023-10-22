@@ -42,12 +42,17 @@ jobs:
           key: ${{ runner.os }}-tools-${{ hashFiles('build.cake') }}
 
       - name: Build project
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         uses: cake-build/cake-action@v1.4.1
         with:
           script-path: build.cake
-          target: Test
+          target: SonarEnd
           verbosity: Diagnostic
           cake-version: 3.1.0
+          arguments: |
+            token: ${{ secrets.SONAR_TOKEN }}
 
       - name: Create Test Coverage Badge
         uses: simon-k/dotnet-code-coverage-badge@v1.0.0
