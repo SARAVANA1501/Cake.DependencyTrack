@@ -1,5 +1,4 @@
 #addin nuget:?package=Cake.Sonar&version=1.1.32
-#tool nuget:?package=MSBuild.SonarQube.Runner.Tool&version=4.8.0
 
 var target = Argument("target", "Test");
 var configuration = Argument("configuration", "Release");
