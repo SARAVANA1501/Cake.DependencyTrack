@@ -38,7 +38,7 @@ jobs:
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 2.x
-          cache: true
+          include-prerelease: true
 
       - name: Cache Tools
         uses: actions/cache@v3
