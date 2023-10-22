@@ -36,6 +36,7 @@ Task("SonarBegin")
 .Does(() => {
  SonarBegin(new SonarBeginSettings{
     Key = "saravana1501_cake-dependencytrack",
+    Organization="saravana1501",
     Url = "https://sonarcloud.io",
     Token=token
  });
