@@ -1,4 +1,5 @@
 #addin nuget:?package=Cake.Sonar&version=1.1.32
+#tool dotnet:?package=dotnet-sonarscanner&version=5.14.0
 
 var target = Argument("target", "Test");
 var configuration = Argument("configuration", "Release");
