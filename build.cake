@@ -3,7 +3,7 @@
 
 var target = Argument("target", "Test");
 var configuration = Argument("configuration", "Release");
-var configuration = Argument("token", "");
+var token = Argument("token", "");
 var solution = "Cake.DependencyTrack.sln";
 
 //////////////////////////////////////////////////////////////////////
@@ -35,10 +35,9 @@ Task("SonarBegin")
 .IsDependentOn("Test")
 .Does(() => {
  SonarBegin(new SonarBeginSettings{
-    # Supported parameters
     Key = "saravana1501_cake-dependencytrack",
     Url = "https://sonarcloud.io",
-    Token=""
+    Token=token
  });
 });
   
@@ -46,7 +45,7 @@ Task("SonarEnd")
 .IsDependentOn("SonarBegin")
 .Does(() => {
   SonarEnd(new SonarEndSettings{
-     Token=""
+     Token=token
   });
 }); 
 
