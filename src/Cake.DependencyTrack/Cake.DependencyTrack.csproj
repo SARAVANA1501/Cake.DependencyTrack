@@ -19,6 +19,7 @@
     </ItemGroup>
     <PropertyGroup>
         <TargetFrameworks>net6.0;net7.0;</TargetFrameworks>
+        <ProjectGuid>1C2034C0-A447-442C-9425-909CBB5113B5</ProjectGuid>
     </PropertyGroup>
 
     <ItemGroup>
