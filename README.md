@@ -1,7 +1,12 @@
 # Cake.DependencyTrack
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
 
 ![workflow](https://github.com/SARAVANA1501/Cake.DependencyTrack/actions/workflows/build.yml/badge.svg)
-![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/SARAVANA1501/cb35602c6a5e75e8a32ca62e0d79631b/raw/cakedependancytrackcoverage.json&logo=csharp)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=saravana1501_cake-dependencytrack)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=saravana1501_cake-dependencytrack&metric=coverage)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=saravana1501_cake-dependencytrack&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=saravana1501_cake-dependencytrack&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=saravana1501_cake-dependencytrack&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
 
 DependencyTrack (https://dependencytrack.org/) is an open source software composition analysis platform that allows
 organizations to identify and reduce the risk of using third-party components in their applications.
