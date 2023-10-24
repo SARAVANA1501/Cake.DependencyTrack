@@ -18,7 +18,8 @@ Task("SonarBegin")
     Url = "https://sonarcloud.io",
     Token=token,
     OpenCoverReportsPath="./tests/Cake.DependencyTrack.Tests/TestResults/coverage.net6.0.opencover.xml",
-    UseCoreClr=true
+    UseCoreClr=true,
+    TestExclusions="./tests/**"
  });
 });
 
