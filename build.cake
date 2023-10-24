@@ -9,21 +9,11 @@ var solution = "Cake.DependencyTrack.sln";
 //////////////////////////////////////////////////////////////////////
 // TASKS
 //////////////////////////////////////////////////////////////////////
-
-Task("Build")
-    .Does(() =>
-{
-    DotNetBuild(solution, new DotNetBuildSettings
-    {
-        Configuration = configuration,
-    });
-});
-
 Task("SonarBegin")
-.IsDependentOn("Build")
 .Does(() => {
  SonarBegin(new SonarBeginSettings{
     Key = "saravana1501_cake-dependencytrack",
+    Name="Cake.DependencyTrack",
     Organization="saravana1501",
     Url = "https://sonarcloud.io",
     Token=token,
@@ -32,8 +22,19 @@ Task("SonarBegin")
  });
 });
 
-Task("Test")
+Task("Build")
     .IsDependentOn("SonarBegin")
+    .Does(() =>
+{
+    DotNetBuild(solution, new DotNetBuildSettings
+    {
+        Configuration = configuration,
+    });
+});
+
+
+Task("Test")
+    .IsDependentOn("Build")
     .Does(() =>
 {
     DotNetTest(solution, new DotNetTestSettings
