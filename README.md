@@ -1,8 +1,7 @@
 # Cake.DependencyTrack
-[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=saravana1501_cake-dependencytrack)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
 
 ![workflow](https://github.com/SARAVANA1501/Cake.DependencyTrack/actions/workflows/build.yml/badge.svg)
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=saravana1501_cake-dependencytrack)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=saravana1501_cake-dependencytrack&metric=coverage)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=saravana1501_cake-dependencytrack&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=saravana1501_cake-dependencytrack&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
