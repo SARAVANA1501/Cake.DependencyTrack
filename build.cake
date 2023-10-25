@@ -21,7 +21,7 @@ Task("SonarBegin")
     Token=token,
     OpenCoverReportsPath="./tests/Cake.DependencyTrack.Tests/TestResults/coverage.net6.0.opencover.xml",
     UseCoreClr=true,
-    TestExclusions="./tests/**"
+    Exclusions="**/tests/**"
  });
 });
 
