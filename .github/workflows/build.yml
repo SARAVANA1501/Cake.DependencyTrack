@@ -57,4 +57,5 @@ jobs:
           verbosity: Diagnostic
           cake-version: 3.1.0
           arguments: |
-            token: ${{ secrets.SONAR_TOKEN }}     
+            token: ${{ secrets.SONAR_TOKEN }}
+            mode: "CI"

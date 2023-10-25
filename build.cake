@@ -2,6 +2,7 @@
 #tool dotnet:?package=dotnet-sonarscanner&version=5.14.0
 
 var target = Argument("target", "SonarEnd");
+var isCI = Argument("mode", "local")=="CI";
 var configuration = Argument("configuration", "Release");
 var token = Argument("token", "");
 var solution = "Cake.DependencyTrack.sln";
@@ -10,6 +11,7 @@ var solution = "Cake.DependencyTrack.sln";
 // TASKS
 //////////////////////////////////////////////////////////////////////
 Task("SonarBegin")
+.WithCriteria(isCI)
 .Does(() => {
  SonarBegin(new SonarBeginSettings{
     Key = "saravana1501_cake-dependencytrack",
@@ -24,8 +26,8 @@ Task("SonarBegin")
 });
 
 Task("Build")
-    .IsDependentOn("SonarBegin")
-    .Does(() =>
+.IsDependentOn("SonarBegin")
+.Does(() =>
 {
     DotNetBuild(solution, new DotNetBuildSettings
     {
@@ -49,6 +51,7 @@ Task("Test")
 
   
 Task("SonarEnd")
+.WithCriteria(isCI)
 .IsDependentOn("Test")
 .Does(() => {
   SonarEnd(new SonarEndSettings{

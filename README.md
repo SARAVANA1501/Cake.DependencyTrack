@@ -6,6 +6,7 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=saravana1501_cake-dependencytrack&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=saravana1501_cake-dependencytrack&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=saravana1501_cake-dependencytrack&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=saravana1501_cake-dependencytrack)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/Cake.DependencyTrack.svg)](https://www.nuget.org/packages/Cake.DependencyTrack/)
 
 DependencyTrack (https://dependencytrack.org/) is an open source software composition analysis platform that allows
 organizations to identify and reduce the risk of using third-party components in their applications.
