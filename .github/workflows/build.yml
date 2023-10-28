@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     branches:
-      - main
+      - "*"
     tags:
       - "*"
     paths-ignore:
@@ -59,3 +59,22 @@ jobs:
           arguments: |
             token: ${{ secrets.SONAR_TOKEN }}
             mode: CI
+  
+  
+  
+  integrationtest:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+    
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Mockoon CLI
+        uses: mockoon/cli-action@v1
+        with:
+          # Mockoon CLI version, default to 'latest'
+          version: "latest"
+          port: 3000
+      - name: Make test call
+        run: curl -X GET http://localhost:3000/endpoint
