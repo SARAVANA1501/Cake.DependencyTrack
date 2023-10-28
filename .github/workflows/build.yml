@@ -1,17 +1,22 @@
 name: Build
 
 on:
+  schedule:
+    - cron: "0 10 * * *" # everyday at 10am
+
+  pull_request:
+    branches: [ master ]
+    types: [ opened, synchronize, closed ]
+  
   push:
-    schedule:
-      - cron: "0 10 * * *" # everyday at 10am
-    tags:
-      - "v*.*.*"
-    push:
-      branches:
-        - master
-    pull_request:
-      branches:
-        - master
+    branches-ignore:
+      - master
+    paths-ignore:
+      - README.md
+      - CHANGELOG.md  # Should never be edited anyway
+      - .gitignore
+      - .github/**
+      - Jenkinsfile
 
 jobs:
   build:
@@ -84,4 +89,4 @@ jobs:
           # port, default to 3000
           port: 3000
       - name: Make test call
-        run: curl -X GET http://localhost:3000/endpoint
+        run: curl -X GET http://localhost:3000/posts
