@@ -63,6 +63,7 @@ jobs:
   
   
   integrationtest:
+    needs: build
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -75,6 +76,9 @@ jobs:
         with:
           # Mockoon CLI version, default to 'latest'
           version: "latest"
+          # Mockoon local data file or URL
+          data-file: "./tests/Cake.DependencyTrack.Integration.Tests/mockoon-data.json"
+          # port, default to 3000
           port: 3000
       - name: Make test call
         run: curl -X GET http://localhost:3000/endpoint
