@@ -67,6 +67,10 @@ jobs:
           arguments: |
             token: ${{ secrets.SONAR_TOKEN }}
             mode: CI
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: artifact
   
   
   
