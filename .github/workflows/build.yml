@@ -70,7 +70,7 @@ jobs:
   
   
   
-  integrationtest:
+  end-to-end-test:
     needs: build
     runs-on: ${{ matrix.os }}
     strategy:
@@ -79,14 +79,8 @@ jobs:
     
     steps:
       - uses: actions/checkout@v3
-      - name: Run Mockoon CLI
-        uses: mockoon/cli-action@v1
+      - uses: isbang/compose-action@v1.5.1
         with:
-          # Mockoon CLI version, default to 'latest'
-          version: "latest"
-          # Mockoon local data file or URL
-          data-file: "./tests/Cake.DependencyTrack.Integration.Tests/mockoon-data.json"
-          # port, default to 3000
-          port: 3000
+          compose-file: "././tests/Cake.DependencyTrack.EndToEnd.Tests/docker/docker-compose.yml"
       - name: Make test call
-        run: curl -X GET http://localhost:3000/posts
+        run: curl -X GET http://localhost:8081/api/version
