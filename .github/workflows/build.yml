@@ -81,7 +81,6 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: artifact
           path: artifact
       - name: Display structure of downloaded files
         run: ls -R
