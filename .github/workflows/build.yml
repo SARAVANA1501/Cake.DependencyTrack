@@ -95,4 +95,3 @@ jobs:
         run: curl -X GET http://localhost:8081/api/version
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: artifact
