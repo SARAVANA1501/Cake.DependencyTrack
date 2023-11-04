@@ -15,7 +15,6 @@ on:
       - README.md
       - CHANGELOG.md  # Should never be edited anyway
       - .gitignore
-      - .github/**
       - Jenkinsfile
 
 jobs:
