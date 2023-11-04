@@ -72,7 +72,7 @@ jobs:
           name: artifact
           path: | 
             artifact
-            ././tests/Cake.DependencyTrack.EndToEnd.Tests/docker/docker-compose.yml
+            tests/Cake.DependencyTrack.EndToEnd.Tests/docker/docker-compose.yml
   
   
   
