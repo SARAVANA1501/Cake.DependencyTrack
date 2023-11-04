@@ -70,9 +70,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: artifact
-          path: | 
-            artifact
-            tests/Cake.DependencyTrack.EndToEnd.Tests/docker/docker-compose.yml
+          path: artifact
   
   
   
@@ -97,9 +95,3 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: artifact
-      - name: Build project
-        uses: cake-build/cake-action@v1.4.1
-        with:
-          script-path: build.cake
-          verbosity: Diagnostic
-          cake-version: 3.1.0
