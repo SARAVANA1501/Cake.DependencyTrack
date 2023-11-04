@@ -70,9 +70,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: artifact
-          path: | 
-            artifact
-            ././tests/Cake.DependencyTrack.EndToEnd.Tests/docker/docker-compose.yml
+          path: artifact
   
   
   
@@ -84,13 +82,14 @@ jobs:
         os: [ ubuntu-latest ]
     
     steps:
+      - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
           name: artifact
           path: artifact
       - uses: isbang/compose-action@v1.5.1
         with:
-          compose-file: "artifact/docker-compose.yml"
+          compose-file: "././tests/Cake.DependencyTrack.EndToEnd.Tests/docker/docker-compose.yml"
       - name: Make test call
         run: curl -X GET http://localhost:8081/api/version
       - name: Display structure of downloaded files
