@@ -93,6 +93,6 @@ jobs:
       - name: Build project
         uses: cake-build/cake-action@v1.4.1
         with:
-          script-path: artifact/tests/Cake.DependencyTrack.EndToEnd.Tests/build.cake
+          script-path: ./artifact/artifact/tests/Cake.DependencyTrack.EndToEnd.Tests/build.cake
           verbosity: Diagnostic
           cake-version: 3.1.0
