@@ -87,7 +87,7 @@ jobs:
         working-directory: .
       - uses: isbang/compose-action@v1.5.1
         with:
-          compose-file: artifact/tests/Cake.DependencyTrack.EndToEnd.Tests/docker/docker-compose.yml
+          compose-file: ./artifact/artifact/tests/Cake.DependencyTrack.EndToEnd.Tests/docker/docker-compose.yml
       - name: Make test call
         run: curl -X GET http://localhost:8081/api/version
       - name: Build project
