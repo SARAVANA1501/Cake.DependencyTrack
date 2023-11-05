@@ -84,7 +84,7 @@ jobs:
           path: artifact
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: artifact
+        working-directory: .
       - uses: isbang/compose-action@v1.5.1
         with:
           compose-file: ./artifact/tests/Cake.DependencyTrack.EndToEnd.Tests/docker/docker-compose.yml
