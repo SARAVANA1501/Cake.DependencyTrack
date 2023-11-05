@@ -1,5 +1,7 @@
-#r "./artifact/artifact/lib/Cake.DependencyTrack.dll"
+#r "Cake.DependencyTrack.dll"
 
+using Cake.DependencyTrack;
+using Cake.DependencyTrack.Models;
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 ///////////////////////////////////////////////////////////////////////////////
@@ -28,8 +30,25 @@ Teardown(ctx =>
 ///////////////////////////////////////////////////////////////////////////////
 
 Task("Default")
-.Does(() => {
-   Information("Hello Cake!");
+.Does(async (context) => {
+    var settings = new UploadBomSettings{
+       ProjectName="test",
+       Version="CI",
+       AutoCreate=true,
+       AbsoluteBomFilePath="/Users/saravanakumar/Downloads/bom.xml",
+       ServerSettings=new ServerSettings{
+            BaseServerUrl="http://localhost:8081",
+            ApiKey="wiB8mCEPaDACQFhuNtEQhvNvFHRAITxI"
+       },
+       ShouldValidateMetrics=true,
+       MetricsThresholdSettings=new MetricsThresholdSettings{
+            CriticalCount=2,
+            HighCount=2,
+            MediumCount=2,
+            LowCount=2
+       }
+    };
+    await context.UploadBomFile(settings);
 });
 
 RunTarget(target);
