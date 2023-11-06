@@ -1,4 +1,4 @@
-#r "artifact/artifact/artifact/lib/Cake.DependencyTrack.dll"
+#r "lib/Cake.DependencyTrack.dll"
 
 using Cake.DependencyTrack;
 using Cake.DependencyTrack.Models;

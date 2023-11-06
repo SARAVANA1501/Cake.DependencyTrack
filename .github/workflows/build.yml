@@ -95,12 +95,12 @@ jobs:
         working-directory: .
       - uses: isbang/compose-action@v1.5.1
         with:
-          compose-file: ./artifact/artifact/artifact/docker-compose.yml
+          compose-file: ./artifact/docker-compose.yml
       - name: Make test call
         run: curl -X GET http://localhost:8081/api/version
       - name: Build project
         uses: cake-build/cake-action@v1.4.1
         with:
-          script-path: ./artifact/artifact/artifact/build.cake
+          script-path: ./artifact/build.cake
           verbosity: Diagnostic
           cake-version: 3.1.0
