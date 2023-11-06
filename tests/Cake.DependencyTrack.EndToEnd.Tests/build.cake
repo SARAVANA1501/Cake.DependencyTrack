@@ -1,4 +1,4 @@
-#r "tests/Cake.DependencyTrack.EndToEnd.Tests/lib/Cake.DependencyTrack.dll"
+#r "lib/Cake.DependencyTrack.dll"
 
 using Cake.DependencyTrack;
 using Cake.DependencyTrack.Models;
