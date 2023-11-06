@@ -86,10 +86,16 @@ jobs:
         os: [ ubuntu-latest ]
     
     steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
       - uses: actions/download-artifact@v3
         with:
           name: artifact
           path: artifact
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: tests/Cake.DependencyTrack.EndToEnd.Tests
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: .
