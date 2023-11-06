@@ -2,6 +2,7 @@
 
 using Cake.DependencyTrack;
 using Cake.DependencyTrack.Models;
+using System.IO;
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,11 +32,12 @@ Teardown(ctx =>
 
 Task("Default")
 .Does(async (context) => {
+    FileInfo f = new FileInfo("TestData/bom.xml");
     var settings = new UploadBomSettings{
        ProjectName="test",
        Version="CI",
        AutoCreate=true,
-       AbsoluteBomFilePath="/Users/saravanakumar/Downloads/bom.xml",
+       AbsoluteBomFilePath=f.FullName,
        ServerSettings=new ServerSettings{
             BaseServerUrl="http://localhost:8081",
             ApiKey="wiB8mCEPaDACQFhuNtEQhvNvFHRAITxI"
