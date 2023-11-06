@@ -61,6 +61,16 @@ jobs:
           arguments: |
             token: ${{ secrets.SONAR_TOKEN }}
             mode: CI
+      - name: Copy integrate test files
+        uses: canastro/copy-file-action@master
+        with:
+          source: "tests/Cake.DependencyTrack.EndToEnd.Tests/docker/docker-compose.yml"
+          target: "artifact/docker-compose.yml"
+      - name: Copy integrate test files
+        uses: canastro/copy-file-action@master
+        with:
+          source: "tests/Cake.DependencyTrack.EndToEnd.Tests/build.cake"
+          target: "artifact/build.cake"
       - uses: actions/upload-artifact@v3
         with:
           name: artifact
