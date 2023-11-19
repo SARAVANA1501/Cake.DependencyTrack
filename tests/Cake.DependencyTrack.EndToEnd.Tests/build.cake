@@ -3,6 +3,7 @@
 using Cake.DependencyTrack;
 using Cake.DependencyTrack.Models;
 using System.IO;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -44,7 +45,7 @@ Task("Prepare")
         new KeyValuePair<string, string>("newPassword", "1234567"),
         new KeyValuePair<string, string>("confirmPassword", "1234567"),
     };
-    using var response = await new HttpClient().PostAsync("http://localhost:8081/api/v1/user/forceChangePassword", new FormUrlEncodedContent(data));
+    var response = await new HttpClient().PostAsync("http://localhost:8081/api/v1/user/forceChangePassword", new FormUrlEncodedContent(data));
     response.EnsureSuccessStatusCode();
     
     //Generate token
@@ -53,7 +54,7 @@ Task("Prepare")
         new KeyValuePair<string, string>("username", "admin"),
         new KeyValuePair<string, string>("password", "1234567")
     };
-    using var response1 =
+    var response1 =
         await new HttpClient().PostAsync("http://localhost:8081/api/v1/user/login", new FormUrlEncodedContent(data1));
     response1.EnsureSuccessStatusCode();
     var token = await response1.Content.ReadAsStringAsync();
