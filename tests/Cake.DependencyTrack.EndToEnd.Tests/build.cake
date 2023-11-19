@@ -37,6 +37,11 @@ Teardown(ctx =>
 
 Task("Prepare")
 .Does(async (context) => {
+    //Dtrack end to end test preparation consists of 4 steps
+    //1. Default password reset, Dtrack requires to change default password
+    //2. Login and generate a token
+    //3. Get current team id which can be used for API key generation
+    //4. Generate the API key for the given team id.
     //Reset password
     var data = new[]
     {
@@ -45,9 +50,10 @@ Task("Prepare")
         new KeyValuePair<string, string>("newPassword", "1234567"),
         new KeyValuePair<string, string>("confirmPassword", "1234567"),
     };
-    var response = await new HttpClient().PostAsync("http://localhost:8081/api/v1/user/forceChangePassword", new FormUrlEncodedContent(data));
+    var httpClient = new HttpClient();
+    var response = await httpClient.PostAsync("http://localhost:8081/api/v1/user/forceChangePassword", new FormUrlEncodedContent(data));
     response.EnsureSuccessStatusCode();
-    
+        
     //Generate token
     var data1 = new[]
     {
@@ -55,27 +61,27 @@ Task("Prepare")
         new KeyValuePair<string, string>("password", "1234567")
     };
     var response1 =
-        await new HttpClient().PostAsync("http://localhost:8081/api/v1/user/login", new FormUrlEncodedContent(data1));
+        await httpClient.PostAsync("http://localhost:8081/api/v1/user/login", new FormUrlEncodedContent(data1));
     response1.EnsureSuccessStatusCode();
     var token = await response1.Content.ReadAsStringAsync();
-    
+        
     //Get self group
-    var requestMessage = new HttpRequestMessage(HttpMethod.Get, "http://localhost:8081/api/v1/user/self");
-    requestMessage.Headers.Authorization =
+    var selfGroupRequest = new HttpRequestMessage(HttpMethod.Get, "http://localhost:8081/api/v1/user/self");
+    selfGroupRequest.Headers.Authorization =
         new AuthenticationHeaderValue("Bearer", token);
-    
-    var response2 = await new HttpClient().SendAsync(requestMessage);
-    response2.EnsureSuccessStatusCode();
-    var responseBody = await response2.Content.ReadAsStreamAsync();
+        
+    var selfGroupResponse = await httpClient.SendAsync(selfGroupRequest);
+    selfGroupResponse.EnsureSuccessStatusCode();
+    var responseBody = await selfGroupResponse.Content.ReadAsStreamAsync();
     var teamuuid = (await JsonSerializer.DeserializeAsync<JsonObject>(responseBody))?["teams"]?[0]?["uuid"]?.ToString();
-    
+        
     //Generate API key
-    var requestMessage1 = new HttpRequestMessage(HttpMethod.Put, $"http://localhost:8081/api/v1/team/{teamuuid}/key");
-    requestMessage1.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-    var response3 = await new HttpClient().SendAsync(requestMessage1);
-    response3.EnsureSuccessStatusCode();
-    var sss = await response3.Content.ReadAsStreamAsync();
-    apiKey = (await JsonSerializer.DeserializeAsync<JsonObject>(sss))?["key"]?.ToString();
+    var generateAPIRequest = new HttpRequestMessage(HttpMethod.Put, $"http://localhost:8081/api/v1/team/{teamuuid}/key");
+    generateAPIRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    var generateAPIResponse = await httpClient.SendAsync(generateAPIRequest);
+    generateAPIResponse.EnsureSuccessStatusCode();
+    var keyStream = await generateAPIResponse.Content.ReadAsStreamAsync();
+    apiKey = (await JsonSerializer.DeserializeAsync<JsonObject>(keyStream))?["key"]?.ToString();
 });
 
 Task("Default")
