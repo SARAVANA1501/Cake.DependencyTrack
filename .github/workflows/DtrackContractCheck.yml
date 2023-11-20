@@ -1,7 +1,7 @@
 name: DtrackContractCheck
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "0 1 * * 1"
 jobs:
   contract-test:
     runs-on: ${{ matrix.os }}
