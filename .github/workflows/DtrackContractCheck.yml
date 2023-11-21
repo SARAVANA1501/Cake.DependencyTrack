@@ -1,0 +1,18 @@
+name: DtrackContractCheck
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+jobs:
+  contract-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+      - uses: isbang/compose-action@v1.5.1
+        with:
+          compose-file: https://dependencytrack.org/docker-compose.yml
+      - name: Make test call
+        run: curl -X GET http://localhost:8081/api/version

@@ -48,11 +48,22 @@ Task("Test")
     });
 });
 
+Task("Publish")
+    .IsDependentOn("Test")
+    .Does(() =>
+{
+    DotNetPublish("./src/Cake.DependencyTrack/Cake.DependencyTrack.csproj", new DotNetPublishSettings {
+        Configuration = configuration,
+        OutputDirectory = "./artifact/lib",
+        Framework = "net6.0"
+    });
+});
+
 
   
 Task("SonarEnd")
 .WithCriteria(isCI)
-.IsDependentOn("Test")
+.IsDependentOn("Publish")
 .Does(() => {
   SonarEnd(new SonarEndSettings{
      Token=token,
