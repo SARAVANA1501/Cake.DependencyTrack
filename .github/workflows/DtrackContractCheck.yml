@@ -2,6 +2,13 @@ name: DtrackContractCheck
 on:
   schedule:
     - cron: "0 1 * * 1"
+  pull_request:
+    branches: [ master ]
+    types: [ opened, synchronize, closed ]
+
+  push:
+    branches-ignore:
+      - master
 jobs:
   contract-test:
     runs-on: ${{ matrix.os }}
@@ -11,8 +18,7 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
-      - uses: isbang/compose-action@v1.5.1
-        with:
-          compose-file: https://dependencytrack.org/docker-compose.yml
+      - name: Download a file
+        run: curl https://dependencytrack.org/docker-compose.yml -o dist
       - name: Make test call
         run: curl -X GET http://localhost:8081/api/version
