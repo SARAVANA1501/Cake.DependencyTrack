@@ -18,13 +18,8 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
-      - name: Download a file
-        run: curl https://dependencytrack.org/docker-compose.yml -o dist
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: .
       - uses: isbang/compose-action@v1.5.1
         with:
-          compose-file: ./dist/docker-compose.yml
+          compose-file: ./tests/Cake.DependencyTrack.Contract.Tests/docker-compose.yml
       - name: Make test call
         run: curl -X GET http://localhost:8081/api/version
